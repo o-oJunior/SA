@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/o-oJunior/SA-QUARTA-FASE/issues"
   },
-  "homepage": "https://github.com/o-oJunior/SA-QUARTA-FASE#readme"
+  "homepage": "https://github.com/o-oJunior/SA-QUARTA-FASE#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
