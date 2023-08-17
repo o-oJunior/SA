@@ -1,0 +1,19 @@
+{
+  "name": "sa-quarta-fase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o-oJunior/SA-QUARTA-FASE.git"
+  },
+  "author": "Édio Júnior, Eugênio Rodrigues, Mairon Siqueira, Ricardo Flores, Vinicius Natanael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/o-oJunior/SA-QUARTA-FASE/issues"
+  },
+  "homepage": "https://github.com/o-oJunior/SA-QUARTA-FASE#readme"
+}
