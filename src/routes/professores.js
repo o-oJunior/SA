@@ -1,8 +1,8 @@
 const { Router } = require('express')
+const ProfessoresController = require('../controller/professores')
 const professorRouter = Router()
+const profesoresController = new ProfessoresController()
 
-professorRouter.get('/', (req, res) => {
-    res.status(200).send({message: 'Rota de professores criada'})
-})
+professorRouter.get('/', profesoresController.getTodosProfessores)
 
 module.exports = professorRouter

@@ -5,7 +5,7 @@ database.connect((erro) => {
     if(erro) {
         return console.log('Não foi possível se conectar com o ElephantSQL', erro);
     } else {
-        return console.log('Conecatado ao ElephantSQL!');
+        return console.log('Conectado ao ElephantSQL!');
     }
 });
 
