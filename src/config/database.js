@@ -1,5 +1,7 @@
 const pg = require('pg');
-const database = new pg.Client('BANCO DE DADOS');
+const dotenv = require('dotenv')
+dotenv.config()
+const database = new pg.Client(process.env.DATABASE);
 
 database.connect((erro) => {
     if(erro) {
