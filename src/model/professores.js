@@ -1,13 +1,14 @@
-const database = require("../config/database");
-
-class ProfessoresModel {
-    constructor() {
-        this.connection = database
-    }
-
-    getTodosProfessores(callback) {
-        this.connection.query("SELECT * FROM professores", callback)
-    }
+function buscarTodosProfessores(database, res) {
+    database.query('SELECT * FROM professores').then(
+        (resultado) => {
+            res.status(200).send({ produtos: resultado.rows });
+        },
+        (erro) => {
+            res.status(500).send({ erro: erro });
+        }
+    );
 }
 
-module.exports = ProfessoresModel
+module.exports = {
+    buscarTodosProfessores
+}
