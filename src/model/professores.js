@@ -7,6 +7,10 @@ function buscarTodosProfessores(database, res) {
             res.status(500).send({ erro: erro });
         }
     );
+const database = require('../config/database');
+
+function buscarTodosProfessores(callback) {
+    database.query('SELECT * FROM professores', callback)
 }
 
 module.exports = {
