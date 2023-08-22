@@ -10,7 +10,24 @@ function deletarProfessor(id, callback) {
   database.query(query, [id], callback);
 }
 
+function adicionarProfessor(professor, callback) {
+  const values = [
+    professor.id,
+    professor.matricula,
+    professor.nome,
+    professor.cpf,
+    professor.telefone,
+  ];
+
+  database.query(
+    "INSERT INTO professores(id, matricula, nome, cpf, telefone) VALUES ($1, $2, $3, $4, $5)",
+    values,
+    callback
+  );
+}
+
 module.exports = {
   buscarTodosProfessores,
   deletarProfessor,
+  adicionarProfessor,
 };

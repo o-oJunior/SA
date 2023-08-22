@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const controller = require('../controller/professores');
+const { Router } = require("express");
+const router = Router();
+const controller = require("../controller/professores");
 
-router.get('/', controller.buscarTodosProfessores);
+router.get("/", controller.buscarTodosProfessores);
+router.post("/adicionar", controller.adicionarProfessor);
+router.delete("/deletar/id/:id", controller.deletarProfessor);
 
-module.exports = router
+module.exports = router;

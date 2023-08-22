@@ -1,21 +1,19 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const bodyParser = require('body-parser')
-const app = express()
-dotenv.config()
-const port = process.env.PORT
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
 
-const professorRouter = require('./routes/professores.js')
-const deletarProfessorRouter = require('./routes/deleteProfessor')
-const adicionarProfessorRouter = require('./routes/adicionarProfessor')
+const dotenv = require("dotenv");
+dotenv.config();
 
-app.use(bodyParser.json())
-app.use(express.urlencoded({extended: true}))
+const port = process.env.PORT;
 
-app.use('/professores', professorRouter)
-app.use('/deletar', deletarProfessorRouter)
-app.use('/professores', adicionarProfessorRouter)
+const routerProfessores = require("./routes/professores.js");
+
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/professores", routerProfessores);
 
 app.listen(port, () => {
-    console.log(`Servidor disponivel na porta ${port}`)
-})
+  console.log(`Servidor disponivel na porta ${port}`);
+});
