@@ -17,11 +17,11 @@ exports.buscarTodosProfessores = (req, res) => {
 exports.deletarProfessor = (req, res) => {
   const professorId = req.params.id;
 
-  deletarProfessor(professorId, (error) => {
+  deletarProfessor(professorId, (error, results) => {
     if (error) {
       res.status(500).send({ error: "Ocorreu um erro inesperado!" });
     } else {
-      res.status(200).send({ mensagem: "Professor removido com sucesso!" });
+      res.status(200).send({ success: "Professor removido com sucesso!" });
     }
   });
 };
@@ -33,7 +33,7 @@ exports.adicionarProfessor = (req, res) => {
     if (error) {
       res.status(500).send({ error: "Ocorreu um erro inesperado!" });
     } else {
-      res.status(200).send({ success: "Professor adicionado com sucesso" });
+      res.status(201).send({ success: "Professor adicionado com sucesso" });
     }
   });
 };
