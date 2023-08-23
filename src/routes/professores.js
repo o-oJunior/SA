@@ -5,5 +5,6 @@ const controller = require("../controller/professores");
 router.get("/", controller.buscarTodosProfessores);
 router.post("/adicionar", controller.adicionarProfessor);
 router.delete("/deletar/id/:id", controller.deletarProfessor);
+router.put("/editar/id/:id", controller.editarProfessor);
 
 module.exports = router;
