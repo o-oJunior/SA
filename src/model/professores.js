@@ -26,33 +26,24 @@ function adicionarProfessor(professor, callback) {
   );
 }
 
-function editarProfessor(id, requisicao, callback) {
-  let query = "UPDATE professores SET";
-  const where = `WHERE id = ${id}`;
+function editarProfessor(id, professor, callback) {
+  const query =
+    "UPDATE professores SET matricula=$1, nome=$2, cpf=$3, telefone=$4 WHERE id=$5";
 
-  const updates = [];
+  const editarProfessor = [
+    professor.matricula,
+    professor.nome,
+    professor.cpf,
+    professor.telefone,
+    id,
+  ];
 
-  if(requisicao.hasOwnProperty('matricula')) {
-    updates.push(`matricula = '${requisicao.matricula}'`);
-  }
-  if(requisicao.hasOwnProperty('nome')) {
-    updates.push(`nome = '${requisicao.nome}'`);
-  }
-  if(requisicao.hasOwnProperty('cpf')) {
-    updates.push(`cpf = '${requisicao.cpf}'`);
-  }
-  if(requisicao.hasOwnProperty('telefone')) {
-    updates.push(`telefone = '${requisicao.telefone}'`);
-  }
-
-  query += " " + updates.join(", ") + " " + where;
-
-  database.query(query, callback);
+  database.query(query, editarProfessor, callback);
 }
 
 module.exports = {
   buscarTodosProfessores,
   deletarProfessor,
   adicionarProfessor,
-  editarProfessor
+  editarProfessor,
 };
