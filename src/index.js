@@ -7,7 +7,7 @@ dotenv.config();
 
 const port = process.env.PORT;
 
-const routerProfessores = require("./routes/professores.js");
+const routerProfessores = require("./routes/professor.js");
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
