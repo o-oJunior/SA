@@ -41,11 +41,11 @@ exports.adicionarProfessor = (req, res) => {
 
 exports.editarProfessor = (req, res) => {
   const id = req.params.id;
-  const requisicao = req.body;
+  const professor = req.body;
 
-  editarProfessor(id, requisicao, (error, results) => {
+  editarProfessor(id, professor, (error, results) => {
     if(error) {
-      res.status(500).send({ error: error });
+      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
     } else {
       res.status(200).send({ success: "Professor editado com sucesso!" })
     }
