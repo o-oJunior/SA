@@ -11,8 +11,7 @@ function deletarProfessor(id, callback) {
 }
 
 function adicionarProfessor(professor, callback) {
-  const values = [
-    professor.id,
+  const adicionarProfessor = [
     professor.matricula,
     professor.nome,
     professor.cpf,
@@ -20,8 +19,8 @@ function adicionarProfessor(professor, callback) {
   ];
 
   database.query(
-    "INSERT INTO professor(id, matricula, nome, cpf, telefone) VALUES ($1, $2, $3, $4, $5)",
-    values,
+    "INSERT INTO professor(matricula, nome, cpf, telefone) VALUES ($1, $2, $3, $4)",
+    adicionarProfessor,
     callback
   );
 }
