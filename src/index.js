@@ -8,11 +8,13 @@ dotenv.config();
 const port = process.env.PORT;
 
 const routerProfessores = require("./routes/professor.js");
+const routerTurmas = require("./routes/turma.js");
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/professores", routerProfessores);
+app.use("/turmas", routerTurmas);
 
 app.listen(port, () => {
   console.log(`Servidor disponivel na porta ${port}`);
