@@ -28,7 +28,7 @@ function adicionarProfessor(professor, callback) {
 function editarProfessor(id, professor, callback) {
   const valor = Object.values(professor);
   const chave = Object.keys(professor);
-  const editarProfessor = chave.map((atributo, i) => `${atributo}='${valor[i]}'`).toString();
+  const editarProfessor = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
   const query = `UPDATE professor SET ${editarProfessor} WHERE id=${id}`;
 
   database.query(query, callback);
