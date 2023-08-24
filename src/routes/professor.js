@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const controller = require("../controller/professores");
+const controller = require("../controller/professor");
 
 router.get("/", controller.buscarTodosProfessores);
 router.post("/adicionar", controller.adicionarProfessor);

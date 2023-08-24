@@ -3,7 +3,7 @@ const {
   deletarProfessor,
   adicionarProfessor,
   editarProfessor
-} = require("../model/professores");
+} = require("../model/professor");
 
 exports.buscarTodosProfessores = (req, res) => {
   buscarTodosProfessores((error, results) => {
