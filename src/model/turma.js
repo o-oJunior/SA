@@ -1,4 +1,4 @@
-const { database } = require("pg/lib/defaults");
+const database = require("../config/database");
 
 function buscarTodasTurmas(callback) {
   database.query("SELECT * FROM turma", callback);
