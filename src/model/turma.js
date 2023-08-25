@@ -7,6 +7,7 @@ function buscarTodasTurmas(callback) {
 function adicionarTurma(turma, callback) {
   const query =
     "INSERT INTO turma(codigo, numero_alunos, periodo) VALUES ($1, $2, $3)";
+  
   const inserirTurma = [turma.codigo, turma.numero_alunos, turma.periodo];
   database.query(query, inserirTurma, callback);
 }
