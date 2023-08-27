@@ -16,9 +16,9 @@ function editarTurma(id, turma, callback) {
   const valor = Object.values(turma);
   const chave = Object.keys(turma);
   const alterarTurma = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
-  const query = `UPDATE professor SET ${alterarTurma} WHERE id=${id}`;
+  const query = `UPDATE turma SET ${alterarTurma} WHERE id=${id}`;
 
-  database.query(query, alterarTurma, callback);
+  database.query(query, callback);
 }
 
 function deletarTurma(id, callback) {
