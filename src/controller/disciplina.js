@@ -1,6 +1,7 @@
 const {
   buscarTodasDisciplinas,
   deletarDisciplina,
+  adicionarDisciplina,
 } = require("../model/disciplina");
 
 exports.buscarTodasDisciplinas = (req, res) => {
@@ -9,6 +10,19 @@ exports.buscarTodasDisciplinas = (req, res) => {
       res.status(500).send({ error: "Ocorreu um erro inesperado!" });
     } else {
       res.status(200).send(results.rows);
+    }
+  });
+};
+
+exports.adicionarDisciplina = (req, res) => {
+  const disciplina = req.body;
+
+  adicionarDisciplina(disciplina, (error, results) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+    } else {
+      res.status(201).send({ success: "Disciplina adicionada com sucesso!" });
     }
   });
 };
