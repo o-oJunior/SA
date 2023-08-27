@@ -4,4 +4,8 @@ function buscarTodasDisciplinas(callback) {
   database.query("SELECT * FROM disciplina", callback);
 }
 
-module.exports = { buscarTodasDisciplinas };
+function deletarDisciplina(id, callback) {
+  database.query("DELETE FROM disciplina WHERE id = $1", [id], callback);
+}
+
+module.exports = { buscarTodasDisciplinas, deletarDisciplina };
