@@ -2,6 +2,7 @@ const {
   buscarTodasDisciplinas,
   deletarDisciplina,
   adicionarDisciplina,
+  editarDisciplina
 } = require("../model/disciplina");
 
 exports.buscarTodasDisciplinas = (req, res) => {
@@ -37,3 +38,16 @@ exports.deletarDisciplina = (req, res) => {
     }
   });
 };
+
+exports.editarDisciplina = (req, res) => {
+  const id = req.params.id;
+  const disciplina = req.body;
+
+  editarDisciplina(id, disciplina, (error, results) => {
+    if(error) {
+      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+    } else {
+      res.status(200).send({ success: "Disciplina editada com sucesso!" })
+    }
+  });
+}

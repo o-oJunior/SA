@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/professores", routerProfessores);
 app.use("/turmas", routerTurmas);
-app.use("/disciplina", routerDisciplina);
+app.use("/disciplinas", routerDisciplina);
 
 app.listen(port, () => {
   console.log(`Servidor disponivel na porta ${port}`);
