@@ -23,8 +23,18 @@ function deletarDisciplina(id, callback) {
   database.query("DELETE FROM disciplina WHERE id = $1", [id], callback);
 }
 
+function editarDisciplina(id, disciplina, callback) {
+  const valor = Object.values(disciplina);
+  const chave = Object.keys(disciplina);
+  const editarDisciplina = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
+  const query = `UPDATE disciplina SET ${editarDisciplina} WHERE id=${id}`;
+
+  database.query(query, callback);
+}
+
 module.exports = {
   buscarTodasDisciplinas,
   adicionarDisciplina,
   deletarDisciplina,
+  editarDisciplina
 };
