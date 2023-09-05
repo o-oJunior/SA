@@ -1,16 +1,18 @@
 const database = require("../config/database");
 
-function buscarTodosProfessores(callback) {
-  database.query("SELECT * FROM professor", callback);
+function buscarTodosProfessores() {
+  return database.query("SELECT * FROM professor");
 }
 
-function deletarProfessor(id, callback) {
+function deletarProfessor(id) {
   const query = "DELETE FROM professor WHERE id = $1;";
 
-  database.query(query, [id], callback);
+  return database.query(query, [id]);
 }
 
-function adicionarProfessor(professor, callback) {
+function adicionarProfessor(professor) {
+  const query =
+    "INSERT INTO professor(matricula, nome, cpf, telefone) VALUES ($1, $2, $3, $4)";
   const adicionarProfessor = [
     professor.matricula,
     professor.nome,
@@ -18,20 +20,18 @@ function adicionarProfessor(professor, callback) {
     professor.telefone,
   ];
 
-  database.query(
-    "INSERT INTO professor(matricula, nome, cpf, telefone) VALUES ($1, $2, $3, $4)",
-    adicionarProfessor,
-    callback
-  );
+  return database.query(query, adicionarProfessor);
 }
 
-function editarProfessor(id, professor, callback) {
+function editarProfessor(id, professor) {
   const valor = Object.values(professor);
   const chave = Object.keys(professor);
-  const editarProfessor = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
+  const editarProfessor = chave.map(
+    (atributo, i) => `${atributo}=${valor[i]}`
+  );
   const query = `UPDATE professor SET ${editarProfessor} WHERE id=${id}`;
 
-  database.query(query, callback);
+  return database.query(query);
 }
 
 module.exports = {
