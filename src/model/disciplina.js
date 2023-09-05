@@ -1,40 +1,41 @@
 const database = require("../config/database");
 
-function buscarTodasDisciplinas(callback) {
-  database.query("SELECT * FROM disciplina", callback);
+function buscarTodasDisciplinas() {
+  return database.query("SELECT * FROM disciplina");
 }
 
-function adicionarDisciplina(disciplina, callback) {
+function adicionarDisciplina(disciplina) {
   const query =
-    "INSERT INTO disciplina(nome, semestre, dias, carga_horaria, id_professor, id_turma) VALUES ($1, $2, $3, $4, $5, $6)";
+    "INSERT INTO disciplina(nome, semestre, carga_horaria, id_professor, id_turma) VALUES ($1, $2, $3, $4, $5)";
   const inserirDisciplina = [
     disciplina.nome,
     disciplina.semestre,
-    disciplina.dias,
     disciplina.carga_horaria,
     disciplina.id_professor,
     disciplina.id_turma,
   ];
 
-  database.query(query, inserirDisciplina, callback);
+  return database.query(query, inserirDisciplina);
 }
 
-function deletarDisciplina(id, callback) {
-  database.query("DELETE FROM disciplina WHERE id = $1", [id], callback);
+function deletarDisciplina(id) {
+  return database.query("DELETE FROM disciplina WHERE id = $1", [id]);
 }
 
-function editarDisciplina(id, disciplina, callback) {
+function editarDisciplina(id, disciplina) {
   const valor = Object.values(disciplina);
   const chave = Object.keys(disciplina);
-  const editarDisciplina = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
+  const editarDisciplina = chave.map(
+    (atributo, i) => `${atributo}='${valor[i]}'`
+  );
   const query = `UPDATE disciplina SET ${editarDisciplina} WHERE id=${id}`;
 
-  database.query(query, callback);
+  return database.query(query);
 }
 
 module.exports = {
   buscarTodasDisciplinas,
   adicionarDisciplina,
   deletarDisciplina,
-  editarDisciplina
+  editarDisciplina,
 };
