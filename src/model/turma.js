@@ -1,30 +1,30 @@
 const database = require("../config/database");
 
-function buscarTodasTurmas(callback) {
-  database.query("SELECT * FROM turma", callback);
+function buscarTodasTurmas() {
+  return database.query("SELECT * FROM turma");
 }
 
-function adicionarTurma(turma, callback) {
+function adicionarTurma(turma) {
   const query =
     "INSERT INTO turma(codigo, numero_alunos, periodo) VALUES ($1, $2, $3)";
 
   const inserirTurma = [turma.codigo, turma.numero_alunos, turma.periodo];
-  database.query(query, inserirTurma, callback);
+  return database.query(query, inserirTurma);
 }
 
-function editarTurma(id, turma, callback) {
+function editarTurma(id, turma) {
   const valor = Object.values(turma);
   const chave = Object.keys(turma);
   const alterarTurma = chave.map((atributo, i) => `${atributo}='${valor[i]}'`);
   const query = `UPDATE turma SET ${alterarTurma} WHERE id=${id}`;
 
-  database.query(query, callback);
+  return database.query(query);
 }
 
-function deletarTurma(id, callback) {
+function deletarTurma(id) {
   const query = "DELETE FROM turma WHERE id = $1;";
 
-  database.query(query, [id], callback);
+  return database.query(query, [id]);
 }
 
 module.exports = {
