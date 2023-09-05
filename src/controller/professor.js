@@ -2,52 +2,45 @@ const {
   buscarTodosProfessores,
   deletarProfessor,
   adicionarProfessor,
-  editarProfessor
+  editarProfessor,
 } = require("../model/professor");
 
-exports.buscarTodosProfessores = (req, res) => {
-  buscarTodosProfessores((error, results) => {
-    if (error) {
-      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
-    } else {
-      res.status(200).send(results.rows);
-    }
-  });
+exports.buscarTodosProfessores = async (req, res) => {
+  try {
+    const response = await buscarTodosProfessores();
+    res.status(200).send(response.rows);
+  } catch (error) {
+    res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+  }
 };
 
-exports.deletarProfessor = (req, res) => {
-  const professorId = req.params.id;
-
-  deletarProfessor(professorId, (error, results) => {
-    if (error) {
-      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
-    } else {
-      res.status(200).send({ success: "Professor removido com sucesso!" });
-    }
-  });
+exports.deletarProfessor = async (req, res) => {
+  try {
+    const professorId = req.params.id;
+    await deletarProfessor(professorId);
+    res.status(200).send({ success: "Professor excluido com sucesso!" });
+  } catch (error) {
+    res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+  }
 };
 
-exports.adicionarProfessor = (req, res) => {
-  const professor = req.body;
-
-  adicionarProfessor(professor, (error, results) => {
-    if (error) {
-      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
-    } else {
-      res.status(201).send({ success: "Professor adicionado com sucesso!" });
-    }
-  });
+exports.adicionarProfessor = async (req, res) => {
+  try {
+    const professor = req.body;
+    await adicionarProfessor(professor);
+    res.status(200).send({ success: "Professor adicionado com sucesso!" });
+  } catch (error) {
+    res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+  }
 };
 
-exports.editarProfessor = (req, res) => {
-  const id = req.params.id;
-  const professor = req.body;
-
-  editarProfessor(id, professor, (error, results) => {
-    if(error) {
-      res.status(500).send({ error: "Ocorreu um erro inesperado!" });
-    } else {
-      res.status(200).send({ success: "Professor editado com sucesso!" })
-    }
-  });
-}
+exports.editarProfessor = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const professor = req.body;
+    await editarProfessor(id, professor);
+    res.status(200).send({ success: "Professor editado com sucesso!" });
+  } catch (error) {
+    res.status(500).send({ error: "Ocorreu um erro inesperado!" });
+  }
+};
