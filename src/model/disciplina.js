@@ -4,6 +4,10 @@ function buscarTodasDisciplinas() {
   return database.query("SELECT * FROM disciplina");
 }
 
+function buscarDisciplinaPorID(id) {
+  return database.query("SELECT * FROM disciplina WHERE id = $1", [id]);
+}
+
 function adicionarDisciplina(disciplina) {
   const query =
     "INSERT INTO disciplina(nome, semestre, carga_horaria, id_professor, id_turma) VALUES ($1, $2, $3, $4, $5)";
@@ -35,6 +39,7 @@ function editarDisciplina(id, disciplina) {
 
 module.exports = {
   buscarTodasDisciplinas,
+  buscarDisciplinaPorID,
   adicionarDisciplina,
   deletarDisciplina,
   editarDisciplina,
