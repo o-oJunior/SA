@@ -4,6 +4,10 @@ function buscarTodasTurmas() {
   return database.query("SELECT * FROM turma");
 }
 
+function buscarTurmaPorID(id) {
+  return database.query("SELECT * FROM turma WHERE id = $1", [id]);
+}
+
 function adicionarTurma(turma) {
   const query =
     "INSERT INTO turma(codigo, numero_alunos, periodo) VALUES ($1, $2, $3)";
@@ -29,7 +33,8 @@ function deletarTurma(id) {
 
 module.exports = {
   buscarTodasTurmas,
+  buscarTurmaPorID,
   deletarTurma,
   adicionarTurma,
-  editarTurma
+  editarTurma,
 };
