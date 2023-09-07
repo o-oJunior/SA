@@ -4,6 +4,10 @@ function buscarTodosProfessores() {
   return database.query("SELECT * FROM professor");
 }
 
+function buscarProfessorPorID(id){
+  return database.query("SELECT * FROM professor WHERE id = $1", [id])
+}
+
 function deletarProfessor(id) {
   const query = "DELETE FROM professor WHERE id = $1;";
 
@@ -27,7 +31,7 @@ function editarProfessor(id, professor) {
   const valor = Object.values(professor);
   const chave = Object.keys(professor);
   const editarProfessor = chave.map(
-    (atributo, i) => `${atributo}=${valor[i]}`
+    (atributo, i) => `${atributo}='${valor[i]}'`
   );
   const query = `UPDATE professor SET ${editarProfessor} WHERE id=${id}`;
 
@@ -36,6 +40,7 @@ function editarProfessor(id, professor) {
 
 module.exports = {
   buscarTodosProfessores,
+  buscarProfessorPorID,
   deletarProfessor,
   adicionarProfessor,
   editarProfessor,
