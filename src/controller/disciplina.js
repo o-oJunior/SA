@@ -1,13 +1,21 @@
 const {
   buscarTodasDisciplinas,
-  deletarDisciplina,
   adicionarDisciplina,
   editarDisciplina,
-  buscarDisciplinaPorID,
-} = require("../model/disciplina");
+  buscarDisciplinaPorNomeETurma,
+  buscarDisciplinaPorNomeETurmaEDia,
+  buscarDisciplinaPorProfessorEDia,
+  editarCargaHorariaDisciplina,
+  buscarDisciplinaPorTodasColunas,
+  deletarDiaDisciplina,
+  deletarTurmaDisciplina,
+  buscarDisciplinaPorProfessor,
+  buscarDisciplinaPorNome,
+  buscarDisciplinaPorTurma,
+} = require('../model/disciplina');
 
-const mensagemStatus404 = { error404: "Disciplina não encontrada!" };
-const mensagemStatus500 = { error500: "Ocorreu um erro inesperado!" };
+const mensagemStatus404 = { error404: 'Disciplina não encontrada!' };
+const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 
 exports.buscarTodasDisciplinas = async (req, res) => {
   try {
@@ -18,25 +26,93 @@ exports.buscarTodasDisciplinas = async (req, res) => {
   }
 };
 
-exports.adicionarDisciplina = async (req, res) => {
+exports.buscarDisciplinaPorProfessor = async (req, res) => {
   try {
-    const disciplina = req.body;
-    await adicionarDisciplina(disciplina);
-    res.status(201).send({ success: "Disciplina adicionada com sucesso!" });
+    const idProfessor = req.params.idProfessor;
+    const response = await buscarDisciplinaPorProfessor(idProfessor);
+    res.status(200).send(response.rows);
   } catch (error) {
     res.status(500).send(mensagemStatus500);
   }
 };
 
-exports.deletarDisciplina = async (req, res) => {
+exports.buscarDisciplinaPorNome = async (req, res) => {
   try {
-    const id = req.params.id;
-    const buscarDisciplina = await buscarDisciplinaPorID(id);
+    const nomeDisciplina = req.params.nomeDisciplina;
+    const response = await buscarDisciplinaPorNome(nomeDisciplina);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    res.status(500).send(mensagemStatus500);
+  }
+};
+
+exports.buscarDisciplinaPorTurma = async (req, res) => {
+  try {
+    const idTurma = req.params.idTurma;
+    const response = await buscarDisciplinaPorTurma(idTurma);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    res.status(500).send(mensagemStatus500);
+  }
+};
+
+exports.buscarDisciplinaPorNomeETurma = async (req, res) => {
+  try {
+    const nomeDisciplina = req.params.nomeDisciplina;
+    const idTurma = req.params.idTurma;
+    const results = await buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
+    res.status(200).send(results.rows);
+  } catch (error) {
+    res.status(500).send(mensagemStatus500);
+  }
+};
+
+exports.adicionarDisciplina = async (req, res) => {
+  try {
+    const disciplina = req.body;
+    const { nome, idProfessor, idTurma, idDia } = disciplina;
+    const buscarDisciplina = await buscarDisciplinaPorNomeETurmaEDia(nome, idTurma, idDia);
+    const verificarProfessorEDia = await buscarDisciplinaPorProfessorEDia(idProfessor, idDia);
+    if (buscarDisciplina.rows.length > 0) {
+      res.status(400).send({ error400: 'Essa turma já está cadastrada nessa disciplina e no mesmo dia!' });
+    } else if (verificarProfessorEDia.rows.length > 0) {
+      res.status(400).send({ error400: 'Professor já está ocupado nesse dia!' });
+    } else {
+      await adicionarDisciplina(disciplina);
+      res.status(201).send({ success: 'Disciplina adicionada com sucesso!' });
+    }
+  } catch (error) {
+    res.status(500).send(mensagemStatus500);
+  }
+};
+
+exports.deletarTurmaDisciplina = async (req, res) => {
+  try {
+    const nomeDisciplina = req.params.nomeDisciplina;
+    const idTurma = req.params.idTurma;
+    const buscarDisciplina = await buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
     if (buscarDisciplina.rows.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      await deletarDisciplina(id);
-      res.status(200).send({ success: "Disciplina removida com sucesso!" });
+      await deletarTurmaDisciplina(nomeDisciplina, idTurma);
+      res.status(200).send({ success: 'Turma removida da disciplina com sucesso!' });
+    }
+  } catch (error) {
+    res.status(500).send(mensagemStatus500);
+  }
+};
+
+exports.deletarDiaDisciplina = async (req, res) => {
+  try {
+    const nomeDisciplina = req.params.nomeDisciplina;
+    const idTurma = req.params.idTurma;
+    const idDia = req.params.idDia;
+    const buscarDisciplina = await buscarDisciplinaPorNomeETurmaEDia(nomeDisciplina, idTurma, idDia);
+    if (buscarDisciplina.rows.length === 0) {
+      res.status(404).send(mensagemStatus404);
+    } else {
+      await deletarDiaDisciplina(nomeDisciplina, idTurma, idDia);
+      res.status(200).send({ success: 'Dia removido com sucesso!' });
     }
   } catch (error) {
     res.status(500).send(mensagemStatus500);
@@ -45,14 +121,37 @@ exports.deletarDisciplina = async (req, res) => {
 
 exports.editarDisciplina = async (req, res) => {
   try {
-    const id = req.params.id;
-    const disciplina = req.body;
-    const buscarDisciplina = await buscarDisciplinaPorID(id);
+    const params = req.params;
+    const body = req.body;
+    const disciplina = {
+      nome: body.nomeDisciplina,
+      semestre: body.semestre,
+      carga_horaria: body.cargaHoraria,
+      id_professor: body.idProfessor,
+      id_turma: body.idTurma,
+      id_dia: body.idDia,
+    };
+    const atributoObjeto = Object.keys(disciplina);
+    atributoObjeto.forEach((atributo) => disciplina[atributo] == undefined && delete disciplina[atributo]);
+    const buscarDisciplina = await buscarDisciplinaPorTodasColunas(params);
+    const buscarProfessorEDia =
+      disciplina.id_professor && disciplina.id_dia
+        ? await buscarDisciplinaPorProfessorEDia(disciplina.id_professor, disciplina.id_dia)
+        : null;
+
+    const verificarAlteracoes = buscarProfessorEDia.rows.filter(
+      (element) => element.id_professor === disciplina.id_professor && element.id_dia === disciplina.id_dia
+    );
     if (buscarDisciplina.rows.length === 0) {
       res.status(404).send(mensagemStatus404);
+    } else if (buscarProfessorEDia.rows.length > 0 && verificarAlteracoes.length === 0) {
+      res.status(400).send({ error400: 'Professor indisponivel! Já está inserido nesse mesmo dia!' });
     } else {
-      await editarDisciplina(id, disciplina);
-      res.status(200).send({ success: "Disciplina editada com sucesso!" });
+      await editarDisciplina(params, disciplina);
+      disciplina.carga_horaria
+        ? await editarCargaHorariaDisciplina(params.nome, params.id_turma, disciplina.carga_horaria)
+        : null;
+      res.status(200).send({ success: 'Disciplina editada com sucesso!' });
     }
   } catch (error) {
     res.status(500).send(mensagemStatus500);
