@@ -1,18 +1,17 @@
-const database = require("../config/database");
+const database = require('../config/database');
 
 function buscarTodasTurmas() {
-  return database.query("SELECT * FROM turma");
+  return database.query('SELECT * FROM turma');
 }
 
 function buscarTurmaPorID(id) {
-  return database.query("SELECT * FROM turma WHERE id = $1", [id]);
+  return database.query('SELECT * FROM turma WHERE id = $1', [id]);
 }
 
 function adicionarTurma(turma) {
-  const query =
-    "INSERT INTO turma(codigo, numero_alunos, periodo) VALUES ($1, $2, $3)";
+  const query = 'INSERT INTO turma(codigo, numero_alunos, turno) VALUES ($1, $2, $3)';
 
-  const inserirTurma = [turma.codigo, turma.numero_alunos, turma.periodo];
+  const inserirTurma = [turma.codigo, turma.numero_alunos, turma.turno];
   return database.query(query, inserirTurma);
 }
 
@@ -26,7 +25,7 @@ function editarTurma(id, turma) {
 }
 
 function deletarTurma(id) {
-  const query = "DELETE FROM turma WHERE id = $1;";
+  const query = 'DELETE FROM turma WHERE id = $1;';
 
   return database.query(query, [id]);
 }
