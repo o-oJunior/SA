@@ -146,10 +146,14 @@ exports.editarDisciplina = async (req, res) => {
     const atributoObjeto = Object.keys(disciplina);
     atributoObjeto.forEach((atributo) => disciplina[atributo] == undefined && delete disciplina[atributo]);
     const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorTodasColunas(params);
-    const buscarProfessorEDia =
-      disciplina.id_professor && disciplina.id_dia
-        ? await disciplinaFacade.buscarDisciplinaPorProfessorEDia(disciplina.id_professor, disciplina.id_dia)
-        : null;
+    const buscarProfessorEDia = [];
+    if (disciplina.id_professor && disciplina.id_dia) {
+      const resposta = await disciplinaFacade.buscarDisciplinaPorProfessorEDia(
+        disciplina.id_professor,
+        disciplina.id_dia
+      );
+      buscarProfessorEDia.push(resposta);
+    }
 
     const verificarAlteracoes = buscarDisciplina.filter(
       (element) => element.id_professor === disciplina.id_professor && element.id_dia === disciplina.id_dia
@@ -161,13 +165,13 @@ exports.editarDisciplina = async (req, res) => {
       res.status(400).send({ error400: 'Professor indisponivel! Já está inserido nesse mesmo dia!' });
     } else {
       await disciplinaFacade.editarDisciplina(params, disciplina);
-      disciplina.carga_horaria
-        ? await disciplinaFacade.editarCargaHorariaDisciplina(
-            params.nome,
-            params.id_turma,
-            disciplina.carga_horaria
-          )
-        : null;
+      if (disciplina.carga_horaria) {
+        await disciplinaFacade.editarCargaHorariaDisciplina(
+          params.nome,
+          params.id_turma,
+          disciplina.carga_horaria
+        );
+      }
       res.status(200).send({ success: 'Disciplina editada com sucesso!' });
     }
     disciplinaFacade.desconectarDatabase();
