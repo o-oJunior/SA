@@ -13,7 +13,7 @@ class TurmaFacade {
     try {
       this.client = new pg.Client(process.env.DATABASE);
       await this.client.connect();
-      console.log('Conectado ao elephantSQL');
+      console.log('Conectado ao ElephantSQL');
     } catch (erro) {
       return mensagemStatus500;
     }
