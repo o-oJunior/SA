@@ -1,4 +1,4 @@
-const TurmaFacade = require("../model/turma");
+const TurmaFacade = require('../facade/turma');
 
 const mensagemStatus404 = { error404: "Turma não foi encontrada!" };
 
