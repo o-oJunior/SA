@@ -4,10 +4,10 @@ const {
   adicionarTurma,
   editarTurma,
   buscarTurmaPorID,
-} = require("../model/turma");
+} = require('../facade/turma');
 
-const mensagemStatus404 = { error404: "Turma não foi encontrada!" };
-const mensagemStatus500 = { error500: "Ocorreu um erro inesperado!" };
+const mensagemStatus404 = { error404: 'Turma não foi encontrada!' };
+const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 
 exports.buscarTodasTurmas = async (req, res) => {
   try {
@@ -22,7 +22,7 @@ exports.adicionarTurma = async (req, res) => {
   try {
     const turma = req.body;
     await adicionarTurma(turma);
-    res.status(201).send({ success: "Turma adicionada com sucesso!" });
+    res.status(201).send({ success: 'Turma adicionada com sucesso!' });
   } catch (error) {
     res.status(500).send(mensagemStatus500);
   }
@@ -37,7 +37,7 @@ exports.editarTurma = async (req, res) => {
       res.status(404).send(mensagemStatus404);
     } else {
       await editarTurma(id, turma);
-      res.status(200).send({ success: "Turma editada com sucesso!" });
+      res.status(200).send({ success: 'Turma editada com sucesso!' });
     }
   } catch (error) {
     res.status(500).send(mensagemStatus500);
@@ -52,7 +52,7 @@ exports.deletarTurma = async (req, res) => {
       res.status(404).send(mensagemStatus404);
     } else {
       await deletarTurma(turmaId);
-      res.status(200).send({ success: "Turma removida com sucesso!" });
+      res.status(200).send({ success: 'Turma removida com sucesso!' });
     }
   } catch (error) {
     res.status(500).send(mensagemStatus500);
