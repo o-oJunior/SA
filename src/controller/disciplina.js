@@ -61,7 +61,6 @@ exports.buscarDisciplinaPorNomeETurma = async (req, res) => {
     res.status(200).send(response);
     disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -152,9 +151,10 @@ exports.editarDisciplina = async (req, res) => {
         ? await disciplinaFacade.buscarDisciplinaPorProfessorEDia(disciplina.id_professor, disciplina.id_dia)
         : null;
 
-    const verificarAlteracoes = buscarProfessorEDia.filter(
+    const verificarAlteracoes = buscarDisciplina.filter(
       (element) => element.id_professor === disciplina.id_professor && element.id_dia === disciplina.id_dia
     );
+
     if (buscarDisciplina.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else if (buscarProfessorEDia.length > 0 && verificarAlteracoes.length === 0) {
