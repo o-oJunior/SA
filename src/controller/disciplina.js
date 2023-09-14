@@ -12,7 +12,7 @@ const {
   buscarDisciplinaPorProfessor,
   buscarDisciplinaPorNome,
   buscarDisciplinaPorTurma,
-} = require('../model/disciplina');
+} = require('../facade/disciplina');
 
 const mensagemStatus404 = { error404: 'Disciplina não encontrada!' };
 const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
