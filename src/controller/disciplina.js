@@ -1,126 +1,139 @@
-const {
-  buscarTodasDisciplinas,
-  adicionarDisciplina,
-  editarDisciplina,
-  buscarDisciplinaPorNomeETurma,
-  buscarDisciplinaPorNomeETurmaEDia,
-  buscarDisciplinaPorProfessorEDia,
-  editarCargaHorariaDisciplina,
-  buscarDisciplinaPorTodasColunas,
-  deletarDiaDisciplina,
-  deletarTurmaDisciplina,
-  buscarDisciplinaPorProfessor,
-  buscarDisciplinaPorNome,
-  buscarDisciplinaPorTurma,
-} = require('../facade/disciplina');
+const DisciplinaFacade = require('../facade/disciplina');
+
+const disciplinaFacade = new DisciplinaFacade();
 
 const mensagemStatus404 = { error404: 'Disciplina não encontrada!' };
-const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 
 exports.buscarTodasDisciplinas = async (req, res) => {
   try {
-    const response = await buscarTodasDisciplinas();
-    res.status(200).send(response.rows);
+    disciplinaFacade.conectarDatabase();
+    const response = await disciplinaFacade.buscarTodasDisciplinas();
+    res.status(200).send(response);
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.buscarDisciplinaPorProfessor = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const idProfessor = req.params.idProfessor;
-    const response = await buscarDisciplinaPorProfessor(idProfessor);
-    res.status(200).send(response.rows);
+    const response = await disciplinaFacade.buscarDisciplinaPorProfessor(idProfessor);
+    res.status(200).send(response);
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.buscarDisciplinaPorNome = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
+    console.log(req.query);
     const nomeDisciplina = req.params.nomeDisciplina;
-    const response = await buscarDisciplinaPorNome(nomeDisciplina);
-    res.status(200).send(response.rows);
+    const response = await disciplinaFacade.buscarDisciplinaPorNome(nomeDisciplina);
+    res.status(200).send(response);
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.buscarDisciplinaPorTurma = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const idTurma = req.params.idTurma;
-    const response = await buscarDisciplinaPorTurma(idTurma);
-    res.status(200).send(response.rows);
+    const response = await disciplinaFacade.buscarDisciplinaPorTurma(idTurma);
+    res.status(200).send(response);
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.buscarDisciplinaPorNomeETurma = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const nomeDisciplina = req.params.nomeDisciplina;
     const idTurma = req.params.idTurma;
-    const results = await buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
-    res.status(200).send(results.rows);
+    const response = await disciplinaFacade.buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
+    res.status(200).send(response);
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    console.log(error);
+    res.status(500).send(error);
   }
 };
 
 exports.adicionarDisciplina = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const disciplina = req.body;
     const { nome, idProfessor, idTurma, idDia } = disciplina;
-    const buscarDisciplina = await buscarDisciplinaPorNomeETurmaEDia(nome, idTurma, idDia);
-    const verificarProfessorEDia = await buscarDisciplinaPorProfessorEDia(idProfessor, idDia);
-    if (buscarDisciplina.rows.length > 0) {
+    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorNomeETurmaEDia(nome, idTurma, idDia);
+    const verificarProfessorEDia = await disciplinaFacade.buscarDisciplinaPorProfessorEDia(
+      idProfessor,
+      idDia
+    );
+    if (buscarDisciplina.length > 0) {
       res.status(400).send({ error400: 'Essa turma já está cadastrada nessa disciplina e no mesmo dia!' });
-    } else if (verificarProfessorEDia.rows.length > 0) {
+    } else if (verificarProfessorEDia.length > 0) {
       res.status(400).send({ error400: 'Professor já está ocupado nesse dia!' });
     } else {
-      await adicionarDisciplina(disciplina);
-      res.status(201).send({ success: 'Disciplina adicionada com sucesso!' });
+      const response = await disciplinaFacade.adicionarDisciplina(disciplina);
+      res.status(201).send(response);
     }
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.deletarTurmaDisciplina = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const nomeDisciplina = req.params.nomeDisciplina;
     const idTurma = req.params.idTurma;
-    const buscarDisciplina = await buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
-    if (buscarDisciplina.rows.length === 0) {
+    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
+    if (buscarDisciplina.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      await deletarTurmaDisciplina(nomeDisciplina, idTurma);
+      await disciplinaFacade.deletarTurmaDisciplina(nomeDisciplina, idTurma);
       res.status(200).send({ success: 'Turma removida da disciplina com sucesso!' });
     }
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.deletarDiaDisciplina = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const nomeDisciplina = req.params.nomeDisciplina;
     const idTurma = req.params.idTurma;
     const idDia = req.params.idDia;
-    const buscarDisciplina = await buscarDisciplinaPorNomeETurmaEDia(nomeDisciplina, idTurma, idDia);
-    if (buscarDisciplina.rows.length === 0) {
+    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorNomeETurmaEDia(
+      nomeDisciplina,
+      idTurma,
+      idDia
+    );
+    if (buscarDisciplina.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      await deletarDiaDisciplina(nomeDisciplina, idTurma, idDia);
+      await disciplinaFacade.deletarDiaDisciplina(nomeDisciplina, idTurma, idDia);
       res.status(200).send({ success: 'Dia removido com sucesso!' });
     }
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.editarDisciplina = async (req, res) => {
   try {
+    disciplinaFacade.conectarDatabase();
     const params = req.params;
     const body = req.body;
     const disciplina = {
@@ -133,27 +146,32 @@ exports.editarDisciplina = async (req, res) => {
     };
     const atributoObjeto = Object.keys(disciplina);
     atributoObjeto.forEach((atributo) => disciplina[atributo] == undefined && delete disciplina[atributo]);
-    const buscarDisciplina = await buscarDisciplinaPorTodasColunas(params);
+    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorTodasColunas(params);
     const buscarProfessorEDia =
       disciplina.id_professor && disciplina.id_dia
-        ? await buscarDisciplinaPorProfessorEDia(disciplina.id_professor, disciplina.id_dia)
+        ? await disciplinaFacade.buscarDisciplinaPorProfessorEDia(disciplina.id_professor, disciplina.id_dia)
         : null;
 
-    const verificarAlteracoes = buscarProfessorEDia.rows.filter(
+    const verificarAlteracoes = buscarProfessorEDia.filter(
       (element) => element.id_professor === disciplina.id_professor && element.id_dia === disciplina.id_dia
     );
-    if (buscarDisciplina.rows.length === 0) {
+    if (buscarDisciplina.length === 0) {
       res.status(404).send(mensagemStatus404);
-    } else if (buscarProfessorEDia.rows.length > 0 && verificarAlteracoes.length === 0) {
+    } else if (buscarProfessorEDia.length > 0 && verificarAlteracoes.length === 0) {
       res.status(400).send({ error400: 'Professor indisponivel! Já está inserido nesse mesmo dia!' });
     } else {
-      await editarDisciplina(params, disciplina);
+      await disciplinaFacade.editarDisciplina(params, disciplina);
       disciplina.carga_horaria
-        ? await editarCargaHorariaDisciplina(params.nome, params.id_turma, disciplina.carga_horaria)
+        ? await disciplinaFacade.editarCargaHorariaDisciplina(
+            params.nome,
+            params.id_turma,
+            disciplina.carga_horaria
+          )
         : null;
       res.status(200).send({ success: 'Disciplina editada com sucesso!' });
     }
+    disciplinaFacade.desconectarDatabase();
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
