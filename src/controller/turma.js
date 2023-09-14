@@ -1,30 +1,25 @@
-const {
-  buscarTodasTurmas,
-  deletarTurma,
-  adicionarTurma,
-  editarTurma,
-  buscarTurmaPorID,
-} = require("../model/turma");
+const TurmaFacade = require("../model/turma");
 
 const mensagemStatus404 = { error404: "Turma não foi encontrada!" };
-const mensagemStatus500 = { error500: "Ocorreu um erro inesperado!" };
+
+const turmaFacade = new TurmaFacade();
 
 exports.buscarTodasTurmas = async (req, res) => {
   try {
-    const response = await buscarTodasTurmas();
-    res.status(200).send(response.rows);
+    const response = await turmaFacade.buscarTodasTurmas();
+    res.status(200).send(response);
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.adicionarTurma = async (req, res) => {
   try {
     const turma = req.body;
-    await adicionarTurma(turma);
-    res.status(201).send({ success: "Turma adicionada com sucesso!" });
+    const response =  await turmaFacade.adicionarTurma(turma);
+    res.status(201).send(response);
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
@@ -32,29 +27,30 @@ exports.editarTurma = async (req, res) => {
   try {
     const id = req.params.id;
     const turma = req.body;
-    const buscarTurma = await buscarTurmaPorID(id);
-    if (buscarTurma.rows.length === 0) {
+    const buscarTurma = await turmaFacade.buscarTurmaPorID(id);
+    if (buscarTurma.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      await editarTurma(id, turma);
-      res.status(200).send({ success: "Turma editada com sucesso!" });
+      const response =  await turmaFacade.editarTurma(id, turma);
+      res.status(200).send( response );
     }
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    res.status(500).send(error);
   }
 };
 
 exports.deletarTurma = async (req, res) => {
   try {
     const id = req.params.id;
-    const buscarTurma = await buscarTurmaPorID(id);
-    if (buscarTurma.rows.length === 0) {
+    const buscarTurma = await turmaFacade.buscarTurmaPorID(id);
+    if (buscarTurma.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      await deletarTurma(turmaId);
-      res.status(200).send({ success: "Turma removida com sucesso!" });
+      const response = await turmaFacade.deletarTurma(id);
+      res.status(200).send( response );
     }
   } catch (error) {
-    res.status(500).send(mensagemStatus500);
+    console.log(error)
+    res.status(500).send(error);
   }
 };
