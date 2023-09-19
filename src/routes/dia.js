@@ -1,7 +1,7 @@
-const { Router } = require("express");
-const controller = require("../controller/dia");
+const { Router } = require('express');
+const controller = require('../controllers/dia');
 const router = Router();
 
-router.get("/", controller.buscarTodosDias);
+router.get('/', controller.buscarTodosDias);
 
 module.exports = router;

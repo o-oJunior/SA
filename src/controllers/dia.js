@@ -1,4 +1,4 @@
-const FacadeDias = require('../facade/dia');
+const FacadeDias = require('../facades/dia');
 
 const facadeDias = new FacadeDias();
 
