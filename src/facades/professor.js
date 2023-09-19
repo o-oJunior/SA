@@ -13,9 +13,9 @@ class ProfessorFacade {
     try {
       this.client = new pg.Client(process.env.DATABASE);
       await this.client.connect();
-      console.log('Conectado ao ElephantSQL');
+      console.log('Conectado ao ElephantSQL!');
     } catch (error) {
-      console.log('Erro ao conectar ao banco de dados!');
+      return mensagemStatus500;
     }
   }
 

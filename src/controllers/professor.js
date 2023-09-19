@@ -1,63 +1,63 @@
-const ProfessorFacade = require('../facade/professor');
+const ProfessorFacade = require('../facades/professor');
 
 const mensagemStatus404 = { error404: 'Professor não foi encontrado!' };
 
 const professorFacade = new ProfessorFacade();
 
 exports.buscarTodosProfessores = async (req, res) => {
+  professorFacade.conectarDatabase();
   try {
-    professorFacade.conectarDatabase();
-    const response = await professorFacade.buscarTodosProfessores();
-    res.status(200).send(response);
-    professorFacade.desconectarDatabase();
+    const resultados = await professorFacade.buscarTodosProfessores();
+    res.status(200).send(resultados);
   } catch (error) {
     res.status(500).send(error);
   }
+  professorFacade.desconectarDatabase();
 };
 
 exports.deletarProfessor = async (req, res) => {
+  professorFacade.conectarDatabase();
   try {
-    professorFacade.conectarDatabase();
     const id = req.params.id;
     const buscarProfessorPorID = await professorFacade.buscarProfessorPorID(id);
     if (buscarProfessorPorID.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      const response = await professorFacade.deletarProfessor(id);
-      res.status(200).send(response);
+      const resultados = await professorFacade.deletarProfessor(id);
+      res.status(200).send(resultados);
     }
-    professorFacade.desconectarDatabase();
   } catch (error) {
     res.status(500).send(error);
   }
+  professorFacade.desconectarDatabase();
 };
 
 exports.adicionarProfessor = async (req, res) => {
+  professorFacade.conectarDatabase();
   try {
-    professorFacade.conectarDatabase();
     const professor = req.body;
-    const response = await professorFacade.adicionarProfessor(professor);
-    res.status(200).send(response);
-    professorFacade.desconectarDatabase();
+    const resultados = await professorFacade.adicionarProfessor(professor);
+    res.status(200).send(resultados);
   } catch (error) {
     res.status(500).send(error);
   }
+  professorFacade.desconectarDatabase();
 };
 
 exports.editarProfessor = async (req, res) => {
+  professorFacade.conectarDatabase();
   try {
-    professorFacade.conectarDatabase();
     const id = req.params.id;
     const professor = req.body;
     const buscarProfessorPorID = await professorFacade.buscarProfessorPorID(id);
     if (buscarProfessorPorID.length === 0) {
       res.status(404).send(mensagemStatus404);
     } else {
-      const response = await professorFacade.editarProfessor(id, professor);
-      res.status(200).send(response);
+      const resultados = await professorFacade.editarProfessor(id, professor);
+      res.status(200).send(resultados);
     }
-    professorFacade.desconectarDatabase();
   } catch (error) {
     res.status(500).send(error);
   }
+  professorFacade.desconectarDatabase();
 };
