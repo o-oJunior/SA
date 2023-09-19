@@ -18,7 +18,7 @@ exports.buscarTodosProfessores = async (req, res) => {
 exports.deletarProfessor = async (req, res) => {
   professorFacade.conectarDatabase();
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const buscarProfessorPorID = await professorFacade.buscarProfessorPorID(id);
     if (buscarProfessorPorID.length === 0) {
       res.status(404).send(mensagemStatus404);
@@ -47,7 +47,7 @@ exports.adicionarProfessor = async (req, res) => {
 exports.editarProfessor = async (req, res) => {
   professorFacade.conectarDatabase();
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const professor = req.body;
     const buscarProfessorPorID = await professorFacade.buscarProfessorPorID(id);
     if (buscarProfessorPorID.length === 0) {
