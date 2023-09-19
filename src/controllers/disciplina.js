@@ -52,7 +52,7 @@ exports.buscarTodasDisciplinas = async (req, res) => {
 exports.buscarDisciplinaPorProfessor = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const idProfessor = req.params.idProfessor;
+    const idProfessor = req.query.idProfessor;
     const buscarResultados = await disciplinaFacade.buscarDisciplinaPorProfessor(idProfessor);
     const resultados = await formatarResultados(buscarResultados);
     res.status(200).send(resultados);
@@ -65,7 +65,7 @@ exports.buscarDisciplinaPorProfessor = async (req, res) => {
 exports.buscarDisciplinaPorNome = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const nomeDisciplina = req.params.nomeDisciplina;
+    const nomeDisciplina = req.query.nome;
     const buscarResultados = await disciplinaFacade.buscarDisciplinaPorNome(nomeDisciplina);
     const resultados = await formatarResultados(buscarResultados);
     res.status(200).send(resultados);
@@ -78,7 +78,7 @@ exports.buscarDisciplinaPorNome = async (req, res) => {
 exports.buscarDisciplinaPorTurma = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const idTurma = req.params.idTurma;
+    const idTurma = req.query.idTurma;
     const buscarResultados = await disciplinaFacade.buscarDisciplinaPorTurma(idTurma);
     const resultados = await formatarResultados(buscarResultados);
     res.status(200).send(resultados);
@@ -91,8 +91,8 @@ exports.buscarDisciplinaPorTurma = async (req, res) => {
 exports.buscarDisciplinaPorNomeETurma = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const nomeDisciplina = req.params.nomeDisciplina;
-    const idTurma = req.params.idTurma;
+    const nomeDisciplina = req.query.nome;
+    const idTurma = req.query.idTurma;
     const buscarResultados = await disciplinaFacade.buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
     const resultados = await formatarResultados(buscarResultados);
     res.status(200).send(resultados);
@@ -129,8 +129,8 @@ exports.adicionarDisciplina = async (req, res) => {
 exports.deletarTurmaDisciplina = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const nomeDisciplina = req.params.nomeDisciplina;
-    const idTurma = req.params.idTurma;
+    const nomeDisciplina = req.query.nome;
+    const idTurma = req.query.idTurma;
     const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorNomeETurma(nomeDisciplina, idTurma);
     if (buscarDisciplina.length === 0) {
       res.status(404).send(mensagemStatus404);
@@ -147,9 +147,9 @@ exports.deletarTurmaDisciplina = async (req, res) => {
 exports.deletarDiaDisciplina = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const nomeDisciplina = req.params.nomeDisciplina;
-    const idTurma = req.params.idTurma;
-    const idDia = req.params.idDia;
+    const nomeDisciplina = req.query.nome;
+    const idTurma = req.query.idTurma;
+    const idDia = req.query.idDia;
     const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorNomeETurmaEDia(
       nomeDisciplina,
       idTurma,
@@ -170,7 +170,15 @@ exports.deletarDiaDisciplina = async (req, res) => {
 exports.editarDisciplina = async (req, res) => {
   disciplinaFacade.conectarDatabase();
   try {
-    const params = req.params;
+    const query = req.query;
+    const objeto = {
+      nome: query.nome,
+      semestre: query.semestre,
+      carga_horaria: query.cargaHoraria,
+      id_professor: query.idProfessor,
+      id_turma: query.idTurma,
+      id_dia: query.idDia,
+    };
     const body = req.body;
     const disciplina = {
       nome: body.nomeDisciplina,
@@ -182,18 +190,18 @@ exports.editarDisciplina = async (req, res) => {
     };
     const atributoObjeto = Object.keys(disciplina);
     atributoObjeto.forEach((atributo) => disciplina[atributo] == undefined && delete disciplina[atributo]);
-    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorTodasColunas(params);
-    const buscarProfessorEDia = [];
+    const buscarDisciplina = await disciplinaFacade.buscarDisciplinaPorTodasColunas(objeto);
+    let buscarProfessorEDia = [];
     if (disciplina.id_professor && disciplina.id_dia) {
       const resposta = await disciplinaFacade.buscarDisciplinaPorProfessorEDia(
         disciplina.id_professor,
         disciplina.id_dia
       );
-      buscarProfessorEDia.push(resposta);
+      buscarProfessorEDia = resposta;
     }
 
     const verificarAlteracoes = buscarDisciplina.filter(
-      (element) => element.id_professor === disciplina.id_professor && element.id_dia === disciplina.id_dia
+      (element) => element.id_professor == disciplina.id_professor && element.id_dia == disciplina.id_dia
     );
 
     if (buscarDisciplina.length === 0) {
@@ -201,11 +209,11 @@ exports.editarDisciplina = async (req, res) => {
     } else if (buscarProfessorEDia.length > 0 && verificarAlteracoes.length === 0) {
       res.status(400).send({ error400: 'Professor indisponivel! Já está inserido nesse mesmo dia!' });
     } else {
-      const resultados = await disciplinaFacade.editarDisciplina(params, disciplina);
+      const resultados = await disciplinaFacade.editarDisciplina(objeto, disciplina);
       if (disciplina.carga_horaria) {
         await disciplinaFacade.editarCargaHorariaDisciplina(
-          params.nome,
-          params.id_turma,
+          objeto.nome,
+          objeto.id_turma,
           disciplina.carga_horaria
         );
       }

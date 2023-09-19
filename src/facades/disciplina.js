@@ -72,17 +72,17 @@ class DisciplinaFacade {
     }
   }
 
-  async buscarDisciplinaPorTodasColunas(params) {
+  async buscarDisciplinaPorTodasColunas(objeto) {
     try {
       const buscarDisciplina = `SELECT * FROM disciplina
        WHERE nome = $1 AND semestre = $2 AND carga_horaria = $3 AND id_professor = $4 AND id_turma = $5 AND id_dia = $6`;
       const valores = [
-        params.nome,
-        params.semestre,
-        params.carga_horaria,
-        params.id_professor,
-        params.id_turma,
-        params.id_dia,
+        objeto.nome,
+        objeto.semestre,
+        objeto.carga_horaria,
+        objeto.id_professor,
+        objeto.id_turma,
+        objeto.id_dia,
       ];
       const resultados = await this.client.query(buscarDisciplina, valores);
       return resultados.rows;
@@ -107,7 +107,7 @@ class DisciplinaFacade {
       const buscarDisciplina = `SELECT disciplina.nome AS nome_disciplina, disciplina.semestre, disciplina.carga_horaria,
       disciplina.id_professor, professor.nome AS nome_professor, disciplina.id_turma, disciplina.id_dia FROM disciplina
       INNER JOIN professor ON professor.id = disciplina.id_professor 
-      WHERE id_professor = $1 AND id_dia = $2;`;
+      WHERE id_professor = $1 AND id_dia = $2`;
       const valores = [idProfessor, idDia];
       const resultados = await this.client.query(buscarDisciplina, valores);
       return resultados.rows;
@@ -149,7 +149,7 @@ class DisciplinaFacade {
   async deletarTurmaDisciplina(nome, idTurma) {
     try {
       const deletar = 'DELETE FROM disciplina WHERE nome = $1 AND id_turma = $2';
-      const valores = [nome.replace('&', ' '), idTurma];
+      const valores = [nome.replace('%', ' '), idTurma];
       await this.client.query(deletar, valores);
       return { success: 'Turma desvinculada da disciplina com sucesso!' };
     } catch (error) {
@@ -160,7 +160,7 @@ class DisciplinaFacade {
   async deletarDiaDisciplina(nome, idTurma, idDia) {
     try {
       const deletar = 'DELETE FROM disciplina WHERE nome = $1 AND id_turma = $2 AND id_dia = $3';
-      const valores = [nome.replace('&', ' '), idTurma, idDia];
+      const valores = [nome.replace('%', ' '), idTurma, idDia];
       await this.client.query(deletar, valores);
       return { success: 'Dia da disciplina removido com sucesso!' };
     } catch (error) {
@@ -168,7 +168,7 @@ class DisciplinaFacade {
     }
   }
 
-  async editarDisciplina(params, disciplina) {
+  async editarDisciplina(objeto, disciplina) {
     try {
       const valor = Object.values(disciplina);
       const chave = Object.keys(disciplina);
@@ -176,12 +176,12 @@ class DisciplinaFacade {
       const atualizar = `UPDATE disciplina SET ${editarDisciplina} WHERE
       nome = $1 AND semestre = $2 AND carga_horaria = $3 AND id_professor = $4 AND id_turma = $5 AND id_dia = $6`;
       const valores = [
-        params.nome.replace('&', ' '),
-        params.semestre,
-        params.carga_horaria,
-        params.id_professor,
-        params.id_turma,
-        params.id_dia,
+        objeto.nome.replace('%', ' '),
+        objeto.semestre,
+        objeto.carga_horaria,
+        objeto.id_professor,
+        objeto.id_turma,
+        objeto.id_dia,
       ];
       await this.client.query(atualizar, valores);
       return { success: 'Disciplina atualizada com sucesso!' };
