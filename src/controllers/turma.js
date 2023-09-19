@@ -39,7 +39,7 @@ exports.adicionarTurma = async (req, res) => {
 exports.editarTurma = async (req, res) => {
   turmaFacade.conectarDatabase();
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const turma = req.body;
     const buscarTurma = await turmaFacade.buscarTurmaPorID(id);
     if (buscarTurma.length === 0) {
@@ -57,7 +57,7 @@ exports.editarTurma = async (req, res) => {
 exports.deletarTurma = async (req, res) => {
   turmaFacade.conectarDatabase();
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const buscarTurma = await turmaFacade.buscarTurmaPorID(id);
     if (buscarTurma.length === 0) {
       res.status(404).send(mensagemStatus404);
@@ -66,7 +66,6 @@ exports.deletarTurma = async (req, res) => {
       res.status(200).send(response);
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
   turmaFacade.desconectarDatabase();
