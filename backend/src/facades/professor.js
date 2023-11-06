@@ -5,9 +5,6 @@ dotenv.config();
 const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 
 class ProfessorFacade {
-  constructor() {
-    this.conectarDatabase();
-  }
 
   async conectarDatabase() {
     try {
