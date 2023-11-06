@@ -11,10 +11,6 @@ const buscar = `SELECT disciplina.nome AS nome_disciplina, disciplina.semestre, 
 
 const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 class DisciplinaFacade {
-  constructor() {
-    this.conectarDatabase();
-  }
-
   async conectarDatabase() {
     try {
       this.client = new pg.Client(process.env.DATABASE);
