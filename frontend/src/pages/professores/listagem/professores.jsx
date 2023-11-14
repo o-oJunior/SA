@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Professores() {
 
-  const [professores, setProfessores] = useState('')
+  const [professores, setProfessores] = useState([])
 
   useEffect(() => {
     buscarProfessores()
@@ -20,7 +20,7 @@ export default function Professores() {
       console.log(error)
     }
   }
-  
+
   console.log(professores)
   return (
     <div>
@@ -28,6 +28,9 @@ export default function Professores() {
       <input placeholder='Pesquisar por Nome ou Matricula de Professor' />
       <Link to='/cadastrarProfessores'><button>Adicionar Professor</button></Link>
 
+      {professores.map((professor) => {
+        return <h5>{professor.nome}</h5>
+})}
     </div>
   )
 }
