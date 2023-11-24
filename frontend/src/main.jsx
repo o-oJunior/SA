@@ -10,39 +10,46 @@ import Turmas from './pages/turmas';
 import CadastrarProfessores from './pages/professores/cadastro/cadastroProfessores';
 import CadastrarTurmas from './pages/cadastroTurmas';
 import CadastrarSalas from './pages/cadastroSalas';
+import Layout from './components/layout/layout';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/professores',
-    element: <Professores />,
-  },
-  {
-    path: '/cadastrarProfessores',
-    element: <CadastrarProfessores />,
-  },
-  {
-    path: '/salas',
-    element: <Salas />,
-  },
-  {
-    path: '/cadastrarSalas',
-    element: <CadastrarSalas />,
-  },
-  {
-    path: '/turmas',
-    element: <Turmas />,
-  },
-  {
-    path: '/cadastrarTurmas',
-    element: <CadastrarTurmas />,
-  },
-  {
-    path: '/ensalamento',
-    element: <Ensalamento />,
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/professores',
+        element: <Professores />,
+      },
+      {
+        path: '/cadastrarProfessores',
+        element: <CadastrarProfessores />,
+      },
+      {
+        path: '/salas',
+        element: <Salas />,
+      },
+      {
+        path: '/cadastrarSalas',
+        element: <CadastrarSalas />,
+      },
+      {
+        path: '/turmas',
+        element: <Turmas />,
+      },
+      {
+        path: '/cadastrarTurmas',
+        element: <CadastrarTurmas />,
+      },
+      {
+        path: '/ensalamento',
+        element: <Ensalamento />,
+      },
+    ],
   },
 ]);
 

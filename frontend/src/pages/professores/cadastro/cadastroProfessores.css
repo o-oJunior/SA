@@ -1,15 +1,27 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
 .inputGroup label {
   display: block;
 }
 
 .inputGroup input {
   padding: 7px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.buttonBack {
+  display: flex;
+  padding: 10px;
 }
 
 .formContainer {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .divGeral {
@@ -25,7 +37,8 @@
 }
 
 .periodoProfessor span,
-.diasDisponivel span {
+.diasDisponivel span,
+.coluna label {
   margin-left: 15px;
   margin-bottom: 15px;
 }
@@ -38,7 +51,7 @@
 .coluna {
   display: flex;
   flex-direction: column;
-  width: 35vw;
+  width: 30vw;
 }
 
 .botoes {

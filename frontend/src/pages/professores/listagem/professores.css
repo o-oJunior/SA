@@ -1,0 +1,61 @@
+.container-professor {
+  margin-left: 200px;
+}
+
+.lista-professor {
+  display: flex;
+  margin: 20px 200px 0px 200px;
+  font-size: 20px;
+  border: 1px solid black;
+}
+
+.lista-professor table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.lista-professor tbody tr td {
+  text-align: center;
+  border: 1px solid black;
+}
+
+.lista-professor thead th {
+  border: 1px solid black;
+}
+
+.lista-professor tbody td button {
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.professores {
+  justify-content: center;
+  padding: 10px 50px;
+  gap: 10px;
+  margin-top: 80px;
+  font-size: 30px;
+}
+
+.professores input {
+  padding: 7px;
+}
+
+.professores label {
+  display: flex;
+  justify-content: center;
+}
+
+.listaGroup {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.listaGroup button {
+  margin-left: 50px;
+  padding: 13px;
+}
+
+.listaGroup input {
+  width: 52%;
+}
