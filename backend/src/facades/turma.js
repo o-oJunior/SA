@@ -72,6 +72,7 @@ class TurmaFacade {
 
   async desconectarDatabase() {
     this.client.end();
+    console.log('Desconectado do ElephantSQL!');
   }
 }
 

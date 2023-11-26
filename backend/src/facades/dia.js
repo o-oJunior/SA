@@ -25,6 +25,7 @@ class FacadeDias {
 
   async desconectarDatabase() {
     this.client.end();
+    console.log('Desconectado do ElephantSQL!');
   }
 }
 

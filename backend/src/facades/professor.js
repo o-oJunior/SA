@@ -5,7 +5,6 @@ dotenv.config();
 const mensagemStatus500 = { error500: 'Ocorreu um erro inesperado!' };
 
 class ProfessorFacade {
-
   async conectarDatabase() {
     try {
       this.client = new pg.Client(process.env.DATABASE);
@@ -70,6 +69,7 @@ class ProfessorFacade {
 
   async desconectarDatabase() {
     this.client.end();
+    console.log('Desconectado do ElephantSQL!');
   }
 }
 
