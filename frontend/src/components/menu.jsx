@@ -5,7 +5,7 @@ import logo from '../assets/logo.png';
 
 export default function Menu() {
   return (
-    <div class="teste">
+    <div className="teste">
       <aside className="menu-lateral">
         <img src={logo} className="logo" />
 

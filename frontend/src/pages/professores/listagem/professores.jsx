@@ -73,11 +73,11 @@ const Professores = () => {
               <td>{professor.telefone}</td>
               <td>
                 <button onClick={() => excluirProfessor(professor.id)}>
-                  <i class="fa-solid fa-trash-can"></i>
+                  <i className="fa-solid fa-trash-can"></i>
                 </button>
                 <button>
                   <Link to={`/editarProfessor/${professor.id}`}>
-                    <i class="fa-solid fa-pen"></i>
+                    <i className="fa-solid fa-pen"></i>
                   </Link>
                 </button>
               </td>
