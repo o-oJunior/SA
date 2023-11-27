@@ -1,0 +1,49 @@
+.teste {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15%;
+}
+
+.menu-lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: blue;
+  height: 100vh;
+  box-sizing: border-box;
+  padding-top: 1em;
+  border-right: 1.5px solid black;
+}
+
+.logo {
+  width: 90%;
+  margin-bottom: 2em;
+}
+
+.div-lista {
+  background-color: black;
+  width: 100%;
+}
+
+.botao-lista {
+  width: 100%;
+  height: 3em;
+  background-color: blue;
+  border: 0;
+  border-top: 1.5px solid black;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-ensalamento {
+  border-bottom: 1.5px solid black;
+}
+
+.botao-lista:hover {
+  background-color: rgb(4, 4, 226);
+}
+
+.botao-lista:active {
+  background-color: rgb(5, 5, 207);
+}
