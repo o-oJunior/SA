@@ -11,12 +11,8 @@ export default function Ensalamento() {
   const [turmas, setTurmas] = useState([]);
   const [disciplinas, setDisciplinas] = useState([]);
   const [dias, setDias] = useState([]);
-  const [selectedProfessor, setSelectedProfessor] = useState('Choose...');
-  const [selectedTurma, setSelectedTurma] = useState('Choose...');
-  const [selectedDisciplina, setSelectedDisciplina] = useState('');
-  const [selectedSemestre, setSelectedSemestre] = useState('');
-  const [selectedDia, setSelectedDia] = useState('Choose...');
   const [ensalamentos, setEnsalamentos] = useState([]);
+  const [disciplina, setDisciplina] = useState({});
 
   // Efeitos para buscar dados ao carregar o componente
   useEffect(() => {
@@ -70,52 +66,68 @@ export default function Ensalamento() {
     }
   };
 
-  // Função para salvar um ensalamento
-  const salvaEnsalamento = () => {
-    const novoEnsalamento = {
-      professor: selectedProfessor,
-      turma: selectedTurma,
-      disciplina: selectedDisciplina,
-      semestre: selectedSemestre,
-      dia: selectedDia,
-    };
+  //Função para adicionar os dados no banco
+  const addDisciplina = async () => {
+    try {
+      await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas/adicionar`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(disciplina),
+        });
 
-    setEnsalamentos([...ensalamentos, novoEnsalamento]);
+        console.log(disciplina)
 
-    // Limpar os campos após salvar
-    setSelectedProfessor('Choose...');
-    setSelectedTurma('Choose...');
-    setSelectedDisciplina('');
-    setSelectedSemestre('');
-    setSelectedDia('Choose...');
-  };
+    } catch (error) {
+      console.error('Erro ao adicionar disciplina:', error);
+    }
+  }
+
+  const handleChange = (event) => {
+    const name = event.target.name
+    const value = event.target.value
+    setDisciplina({ ...disciplina, [name]: value })
+  }
 
   return (
     <div>
       <div className='divGeral'>
         <Form>
           {/* Inputs para Disciplina e Semestre */}
-          <Row className="mb-3">
+          <Row className="mb-4">
             <Form.Group as={Col} controlId="formGridDisciplina">
               <Form.Label>Disciplina</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Escreva a disciplina"
-                value={selectedDisciplina}
-                onChange={(e) => setSelectedDisciplina(e.target.value)}
+                value={disciplina.nome}
+                onChange={(e) => handleChange(e)}
+                name="nome"
               />
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridSemestre">
               <Form.Label>Semestre</Form.Label>
               <Form.Control
-                type="text"  /* Alterado para aceitar apenas números */
+                type="number"  /* Alterado para aceitar apenas números */
                 placeholder="Ex: 1"
-                value={selectedSemestre}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/, ''); /* Remove qualquer caractere não numérico */
-                  setSelectedSemestre(value);
-                }}
+                value={disciplina.semestre}
+                onChange={(e) => handleChange(e)}
+                name="semestre"
+                style={{ maxWidth: '80px' }}  /* Definido um tamanho máximo para o input */
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridCarga">
+              <Form.Label>Carga Horária</Form.Label>
+              <Form.Control
+                type="number"  /* Alterado para aceitar apenas números */
+                placeholder="Ex: 1"
+                value={disciplina.carga_horaria}
+                onChange={(e) => handleChange(e)}
+                name="cargaHoraria"
                 style={{ maxWidth: '80px' }}  /* Definido um tamanho máximo para o input */
               />
             </Form.Group>
@@ -126,61 +138,71 @@ export default function Ensalamento() {
             <Form.Group as={Col} controlId="formGridProfessor">
               <Form.Label>Selecione um Professor</Form.Label>
               <Form.Select
-                value={selectedProfessor}
-                onChange={(e) => setSelectedProfessor(e.target.value)}
+                value={disciplina.id_professor}
+                onChange={(e) => handleChange(e)}
+                name="idProfessor"
               >
-                <option key="professor-default" value="Choose..." disabled>
-                  Selecione...
-                </option>
                 {Array.isArray(professores) &&
-                  professores.map((professor) => (
-                    <option key={`professor-${professor.id}`} value={professor.nome}>
-                      {professor.nome}
-                    </option>
-                  ))}
+                  <>
+                    <option value=''>Selecione professor...</option>
+                    {professores.map((professor) => (
+                      <option key={`professor-${professor.id}`} value={professor.id}>
+                        {professor.nome}
+                      </option>
+                    ))}
+                  </>
+                }
               </Form.Select>
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridTurma">
               <Form.Label>Selecione uma Turma</Form.Label>
               <Form.Select
-                value={selectedTurma}
-                onChange={(e) => setSelectedTurma(e.target.value)}
+                value={disciplina.id_turma}
+                onChange={(e) => handleChange(e)}
+                name="idTurma"
               >
-                <option key="turma-default" value="Choose..." disabled>
-                  Selecione...
-                </option>
                 {Array.isArray(turmas) &&
-                  turmas.map((turma) => (
-                    <option key={`turma-${turma.id}`} value={turma.codigo}>
-                      {turma.codigo}
+                  <>
+                    <option key="turma-default" value="">
+                      Selecione turma...
                     </option>
-                  ))}
+                    {turmas.map((turma) => (
+                      <option key={`turma-${turma.id}`} value={turma.id}>
+                        {turma.codigo}
+                      </option>
+                    ))}
+                  </>
+                }
               </Form.Select>
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridDias">
               <Form.Label>Selecione um Dia</Form.Label>
               <Form.Select
-                value={selectedDia}
-                onChange={(e) => setSelectedDia(e.target.value)}
+                value={disciplina.id_dia}
+                onChange={(e) => handleChange(e)}
+                name="idDia"
               >
-                <option key="dia-default" value="Choose..." disabled>
-                  Selecione...
-                </option>
                 {Array.isArray(dias) &&
-                  dias.map((dia) => (
-                    <option key={`turma-${dia.id}`} value={dia.diaSemana}>
-                      {dia.diaSemana}
+                  <>
+                    <option key="dia-default" value="">
+                      Selecione dia...
                     </option>
-                  ))}
+                    {dias.map((dia) => (
+                      <option key={`dia-${dia.id}`} value={dia.id}>
+                        {dia.diaSemana}
+                      </option>
+                    ))}
+                  </>
+                }
               </Form.Select>
             </Form.Group>
           </Row>
 
           {/* Botão para Salvar */}
           <div className="d-flex justify-content-end">
-            <Button variant="primary" onClick={salvaEnsalamento}>
+            <Button variant="primary" onClick={addDisciplina}>
               Salvar
             </Button>
           </div>
@@ -198,16 +220,18 @@ export default function Ensalamento() {
               <th scope='col'>Disciplina</th>
               <th scope='col'>Semestre</th>
               <th scope='col'>Dia</th>
+              <th scope='col'>Carga Horária</th>
             </tr>
           </thead>
           <tbody>
-            {ensalamentos.map((ensalamento, index) => (
-              <tr key={`ensalamento-${index}`}>
+            {ensalamentos.map((ensalamento, i) => (
+              <tr key={`ensalamento-${i}`}>
                 <td>{ensalamento.professor}</td>
                 <td>{ensalamento.turma}</td>
                 <td>{ensalamento.disciplina}</td>
                 <td>{ensalamento.semestre}</td>
                 <td>{ensalamento.dia}</td>
+                <td>{ensalamento.cargaH}</td>
               </tr>
             ))}
           </tbody>
