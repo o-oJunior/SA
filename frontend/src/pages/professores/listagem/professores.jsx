@@ -26,6 +26,9 @@ const Professores = () => {
         // Faça uma solicitação para excluir o professor da API
         await fetch(`https://api-ensalamento-senai.onrender.com/api/professores/deletar/professor?id=${id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
         // Atualize a lista de professores localmente
         const updatedProfessores = professores.filter((professor) => professor.id !== id);
@@ -76,7 +79,7 @@ const Professores = () => {
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
                 <button>
-                  <Link to={`/editarProfessor/${professor.id}`}>
+                  <Link to={`/editarProfessores/${professor.id}`}>
                     <i class="fa-solid fa-pen"></i>
                   </Link>
                 </button>
