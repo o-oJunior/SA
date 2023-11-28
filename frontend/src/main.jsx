@@ -5,11 +5,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/home';
 import Ensalamento from './pages/ensalamento/listagem/ensalamento';
 import Professores from './pages/professores/listagem/professores';
-import Salas from './pages/salas';
 import Turmas from './pages/turmas';
 import CadastrarProfessores from './pages/professores/cadastro/cadastroProfessores';
 import CadastrarTurmas from './pages/cadastroTurmas';
-import CadastrarSalas from './pages/cadastroSalas';
 import Layout from './components/layout/layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -30,14 +28,6 @@ const router = createBrowserRouter([
       {
         path: '/cadastrarProfessores',
         element: <CadastrarProfessores />,
-      },
-      {
-        path: '/salas',
-        element: <Salas />,
-      },
-      {
-        path: '/cadastrarSalas',
-        element: <CadastrarSalas />,
       },
       {
         path: '/turmas',
