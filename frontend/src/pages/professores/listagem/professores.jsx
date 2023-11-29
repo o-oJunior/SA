@@ -90,9 +90,6 @@ const Professores = () => {
                 <button onClick={() => excluirProfessor(professor.id)}>
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
-                <button>
-                  <i class="fa-solid fa-pen"></i>
-                </button>
               </td>
             </tr>
           ))}
