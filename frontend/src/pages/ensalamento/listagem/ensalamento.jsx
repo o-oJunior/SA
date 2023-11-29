@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import EnsalamentoModal from '../../../components/modal';
 import './ensalamento.css';
 
-
 export default function Ensalamento() {
   // Estados para armazenar dados
   const [professores, setProfessores] = useState([]);
@@ -16,8 +15,7 @@ export default function Ensalamento() {
   const [disciplina, setDisciplina] = useState({});
   const [ensalamentos, setEnsalamentos] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [select, setSelect] = useState([])
-
+  const [select, setSelect] = useState([]);
 
   // Efeitos para buscar dados ao carregar o componente
   useEffect(() => {
@@ -30,14 +28,16 @@ export default function Ensalamento() {
 
   const buscarDisciplinaPorNomeETurma = async (disciplina) => {
     try {
-      const response = await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas/disciplina&turma?nome=${disciplina.nomeDisciplina}&idTurma=${disciplina.idTurma}`)
-      const results = await response.json()
-      setSelect(results)
-      setModalShow(true)
+      const response = await fetch(
+        `https://api-ensalamento-senai.onrender.com/api/disciplinas/disciplina&turma?nome=${disciplina.nomeDisciplina}&idTurma=${disciplina.idTurma}`
+      );
+      const results = await response.json();
+      setSelect(results);
+      setModalShow(true);
     } catch (error) {
-      console.log('Ocorreu um erro ao exibir os detalhes!')
+      console.log('Ocorreu um erro ao exibir os detalhes!');
     }
-  }
+  };
 
   // Função para buscar professores
   const buscarProfessores = async () => {
@@ -86,41 +86,53 @@ export default function Ensalamento() {
   //Função para adicionar os dados no banco
   const addDisciplina = async () => {
     try {
-      await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas/adicionar`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(disciplina),
-        });
+      await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas/adicionar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(disciplina),
+      });
 
-      console.log(disciplina)
-
+      console.log(disciplina);
     } catch (error) {
       console.error('Erro ao adicionar disciplina:', error);
     }
-  }
+  };
 
   const handeDisciplinas = async () => {
     try {
       const response = await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas`);
       const data = await response.json();
-      setEnsalamentos(data)
+      setEnsalamentos(data);
     } catch (error) {
       console.error('Erro ao buscar disciplinas:', error);
     }
-  }
+  };
 
   const handleChange = (event) => {
-    const name = event.target.name
-    const value = event.target.value
-    setDisciplina({ ...disciplina, [name]: value })
-  }
+    const name = event.target.name;
+    const value = event.target.value;
+    setDisciplina({ ...disciplina, [name]: value });
+  };
+
+  const deleted = async (item) => {
+    try {
+      await fetch(
+        `https://api-ensalamento-senai.onrender.com/api/disciplinas/deletar/disciplina&turma&dia?nome=${item.nomeDisciplina}&idTurma=${item.idTurma}&idDia=${item.idDia}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      alert('Dia excluido com sucesso!');
+    } catch (error) {
+      alert('Erro ao deletar o dia!');
+    }
+  };
 
   return (
     <div>
-      <div className='divGeral'>
+      <div className="divGeral">
         <Form>
           {/* Inputs para Disciplina e Semestre */}
           <Row className="mb-4">
@@ -138,24 +150,24 @@ export default function Ensalamento() {
             <Form.Group as={Col} controlId="formGridSemestre">
               <Form.Label>Semestre</Form.Label>
               <Form.Control
-                type="number"  /* Alterado para aceitar apenas números */
+                type="number" /* Alterado para aceitar apenas números */
                 placeholder="Ex: 1"
                 value={disciplina.semestre}
                 onChange={(e) => handleChange(e)}
                 name="semestre"
-                style={{ maxWidth: '80px' }}  /* Definido um tamanho máximo para o input */
+                style={{ maxWidth: '80px' }} /* Definido um tamanho máximo para o input */
               />
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridCarga">
               <Form.Label>Carga Horária</Form.Label>
               <Form.Control
-                type="number"  /* Alterado para aceitar apenas números */
+                type="number" /* Alterado para aceitar apenas números */
                 placeholder="Ex: 1"
                 value={disciplina.carga_horaria}
                 onChange={(e) => handleChange(e)}
                 name="cargaHoraria"
-                style={{ maxWidth: '80px' }}  /* Definido um tamanho máximo para o input */
+                style={{ maxWidth: '80px' }} /* Definido um tamanho máximo para o input */
               />
             </Form.Group>
           </Row>
@@ -169,27 +181,23 @@ export default function Ensalamento() {
                 onChange={(e) => handleChange(e)}
                 name="idProfessor"
               >
-                {Array.isArray(professores) &&
+                {Array.isArray(professores) && (
                   <>
-                    <option value=''>Selecione professor...</option>
+                    <option value="">Selecione professor...</option>
                     {professores.map((professor) => (
                       <option key={`professor-${professor.id}`} value={professor.id}>
                         {professor.nome}
                       </option>
                     ))}
                   </>
-                }
+                )}
               </Form.Select>
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridTurma">
               <Form.Label>Selecione uma Turma</Form.Label>
-              <Form.Select
-                value={disciplina.id_turma}
-                onChange={(e) => handleChange(e)}
-                name="idTurma"
-              >
-                {Array.isArray(turmas) &&
+              <Form.Select value={disciplina.id_turma} onChange={(e) => handleChange(e)} name="idTurma">
+                {Array.isArray(turmas) && (
                   <>
                     <option key="turma-default" value="">
                       Selecione turma...
@@ -200,18 +208,14 @@ export default function Ensalamento() {
                       </option>
                     ))}
                   </>
-                }
+                )}
               </Form.Select>
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridDias">
               <Form.Label>Selecione um Dia</Form.Label>
-              <Form.Select
-                value={disciplina.id_dia}
-                onChange={(e) => handleChange(e)}
-                name="idDia"
-              >
-                {Array.isArray(dias) &&
+              <Form.Select value={disciplina.id_dia} onChange={(e) => handleChange(e)} name="idDia">
+                {Array.isArray(dias) && (
                   <>
                     <option key="dia-default" value="">
                       Selecione dia...
@@ -222,7 +226,7 @@ export default function Ensalamento() {
                       </option>
                     ))}
                   </>
-                }
+                )}
               </Form.Select>
             </Form.Group>
           </Row>
@@ -237,16 +241,16 @@ export default function Ensalamento() {
       </div>
 
       {/* Tabela para exibir os ensalamentos */}
-      <div className='divGeral'>
+      <div className="divGeral">
         <h2>Ensalamentos:</h2>
         <table className="table text-center">
           <thead>
             <tr>
-              <th scope='col'>Detalhes</th>
-              <th scope='col'>Turma</th>
-              <th scope='col'>Disciplina</th>
-              <th scope='col'>Semestre</th>
-              <th scope='col'>Carga Horária</th>
+              <th scope="col">Detalhes</th>
+              <th scope="col">Turma</th>
+              <th scope="col">Disciplina</th>
+              <th scope="col">Semestre</th>
+              <th scope="col">Carga Horária</th>
             </tr>
           </thead>
           <tbody>
@@ -271,9 +275,14 @@ export default function Ensalamento() {
         </table>
       </div>
 
-
-      {modalShow && <EnsalamentoModal show={modalShow} item={select} handleClose={() => setModalShow(false)}/>}
+      {modalShow && (
+        <EnsalamentoModal
+          show={modalShow}
+          item={select}
+          deleted={(item) => deleted(item)}
+          handleClose={() => setModalShow(false)}
+        />
+      )}
     </div>
   );
 }
-

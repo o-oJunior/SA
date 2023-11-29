@@ -107,3 +107,7 @@
 .btnDelete:hover {
   cursor: pointer;
 }
+
+.listaTurma:hover {
+  cursor: pointer;
+}
