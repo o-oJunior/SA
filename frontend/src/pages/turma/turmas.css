@@ -1,0 +1,99 @@
+.containerTurma {
+  margin-left: 200px;
+  padding: 60px 20px;
+}
+
+.groupSearch {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.groupSearch a {
+  text-decoration: none;
+  padding: 10px;
+  background-color: #dedede;
+  color: #000;
+  border-radius: 10px;
+}
+
+.groupSearch a:hover {
+  background-color: #c9c9c9;
+}
+
+.listaTurmas {
+  padding: 20px;
+}
+
+.listaTurmas thead {
+  text-align: center;
+  background-color: #00f;
+  color: #fff;
+}
+
+.input {
+  padding: 10px;
+  width: 40%;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+}
+
+.groupInput {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 5px;
+}
+
+.inputForm {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  min-width: 157px;
+}
+
+.containerForm {
+  display: flex;
+  padding: 20px;
+  margin: 20px 0px;
+  flex-direction: column;
+  border: 1px solid #c9c9c9;
+  border-radius: 20px;
+  gap: 20px;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.btnGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btnGroup button {
+  padding: 10px;
+  border-style: none;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.btnSalvar {
+  background-color: #009246;
+}
+
+.btnLimpar {
+  background-color: #ce2b37;
+}
