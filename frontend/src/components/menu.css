@@ -26,6 +26,11 @@
   width: 100%;
 }
 
+.lista-botoes {
+  padding: 0;
+  margin: 0;
+}
+
 .botao-lista {
   width: 100%;
   height: 3em;
