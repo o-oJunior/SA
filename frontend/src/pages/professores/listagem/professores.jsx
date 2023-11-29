@@ -22,10 +22,23 @@ const Professores = () => {
 
   const excluirProfessor = async (id) => {
     try {
+      // Verifique se o professor tem vínculos com disciplinas
+      const responseDisciplinas = await fetch(
+        `https://api-ensalamento-senai.onrender.com/api/disciplinas/professor?idProfessor=${id}`
+      );
+      const disciplinasDoProfessor = await responseDisciplinas.json();
+
+      if (disciplinasDoProfessor.length > 0) {
+        alert('Este professor possui vínculos com alguma disciplina e não pode ser excluído.');
+        return;
+      }
+
       if (window.confirm('Tem certeza que deseja excluir este professor?')) {
-        // Faça uma solicitação para excluir o professor da API
         await fetch(`https://api-ensalamento-senai.onrender.com/api/professores/deletar/professor?id=${id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
         // Atualize a lista de professores localmente
         const updatedProfessores = professores.filter((professor) => professor.id !== id);
@@ -59,6 +72,7 @@ const Professores = () => {
       <table>
         <thead>
           <tr>
+            <th scope="col">Matricula</th>
             <th scope="col">Nome</th>
             <th scope="col">Cpf</th>
             <th scope="col">Telefone</th>
@@ -68,17 +82,13 @@ const Professores = () => {
         <tbody>
           {professoresFiltrados.map((professor) => (
             <tr key={professor.id}>
+              <td>{professor.matricula}</td>
               <td>{professor.nome}</td>
               <td>{professor.cpf}</td>
               <td>{professor.telefone}</td>
               <td>
                 <button onClick={() => excluirProfessor(professor.id)}>
                   <i className="fa-solid fa-trash-can"></i>
-                </button>
-                <button>
-                  <Link to={`/editarProfessor/${professor.id}`}>
-                    <i className="fa-solid fa-pen"></i>
-                  </Link>
                 </button>
               </td>
             </tr>
@@ -99,7 +109,7 @@ const Professores = () => {
         <label>Professores</label>
         <div className="listaGroup">
           <input
-            placeholder="Pesquisar por Nome ou Matricula de Professor"
+            placeholder="Pesquisar pelo Nome ou Matricula do Professor"
             value={termoPesquisa}
             onChange={handleChangePesquisa}
           />

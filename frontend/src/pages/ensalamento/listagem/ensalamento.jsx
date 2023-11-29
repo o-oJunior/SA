@@ -3,7 +3,9 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import EnsalamentoModal from '../../../components/modal';
 import './ensalamento.css';
+
 
 export default function Ensalamento() {
   // Estados para armazenar dados
@@ -11,8 +13,11 @@ export default function Ensalamento() {
   const [turmas, setTurmas] = useState([]);
   const [disciplinas, setDisciplinas] = useState([]);
   const [dias, setDias] = useState([]);
-  const [ensalamentos, setEnsalamentos] = useState([]);
   const [disciplina, setDisciplina] = useState({});
+  const [ensalamentos, setEnsalamentos] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const [select, setSelect] = useState([])
+
 
   // Efeitos para buscar dados ao carregar o componente
   useEffect(() => {
@@ -20,7 +25,19 @@ export default function Ensalamento() {
     buscarTurmas();
     buscarDisciplinas();
     buscarDias();
+    handeDisciplinas();
   }, []);
+
+  const buscarDisciplinaPorNomeETurma = async (disciplina) => {
+    try {
+      const response = await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas/disciplina&turma?nome=${disciplina.nomeDisciplina}&idTurma=${disciplina.idTurma}`)
+      const results = await response.json()
+      setSelect(results)
+      setModalShow(true)
+    } catch (error) {
+      console.log('Ocorreu um erro ao exibir os detalhes!')
+    }
+  }
 
   // Função para buscar professores
   const buscarProfessores = async () => {
@@ -78,10 +95,20 @@ export default function Ensalamento() {
           body: JSON.stringify(disciplina),
         });
 
-        console.log(disciplina)
+      console.log(disciplina)
 
     } catch (error) {
       console.error('Erro ao adicionar disciplina:', error);
+    }
+  }
+
+  const handeDisciplinas = async () => {
+    try {
+      const response = await fetch(`https://api-ensalamento-senai.onrender.com/api/disciplinas`);
+      const data = await response.json();
+      setEnsalamentos(data)
+    } catch (error) {
+      console.error('Erro ao buscar disciplinas:', error);
     }
   }
 
@@ -215,28 +242,38 @@ export default function Ensalamento() {
         <table className="table text-center">
           <thead>
             <tr>
-              <th scope='col'>Professor</th>
+              <th scope='col'>Detalhes</th>
               <th scope='col'>Turma</th>
               <th scope='col'>Disciplina</th>
               <th scope='col'>Semestre</th>
-              <th scope='col'>Dia</th>
               <th scope='col'>Carga Horária</th>
             </tr>
           </thead>
           <tbody>
             {ensalamentos.map((ensalamento, i) => (
-              <tr key={`ensalamento-${i}`}>
-                <td>{ensalamento.professor}</td>
-                <td>{ensalamento.turma}</td>
-                <td>{ensalamento.disciplina}</td>
+              <tr key={i}>
+                <td>
+                  <Button
+                    variant="link"
+                    className="btn btn-link"
+                    onClick={() => buscarDisciplinaPorNomeETurma(ensalamento)}
+                  >
+                    Detalhes
+                  </Button>
+                </td>
+                <td>{ensalamento.codigoTurma}</td>
+                <td>{ensalamento.nomeDisciplina}</td>
                 <td>{ensalamento.semestre}</td>
-                <td>{ensalamento.dia}</td>
-                <td>{ensalamento.cargaH}</td>
+                <td>{ensalamento.cargaHoraria} Horas</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+
+      {modalShow && <EnsalamentoModal show={modalShow} item={select} handleClose={() => setModalShow(false)}/>}
     </div>
   );
 }
+
