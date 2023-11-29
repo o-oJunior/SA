@@ -18,12 +18,6 @@ export default function Menu() {
             </li>
 
             <li>
-              <Link to="/salas">
-                <button className="botao-lista">Salas</button>
-              </Link>
-            </li>
-
-            <li>
               <Link to="/turmas">
                 <button className="botao-lista">Turmas</button>
               </Link>
