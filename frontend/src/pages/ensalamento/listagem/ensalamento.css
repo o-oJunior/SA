@@ -1,23 +1,21 @@
 .divGeral {
-    padding: 5px; 
-    margin: 100px 40px 0 240px;
+  padding: 5px;
+  margin: 100px 40px 0 240px;
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
- tbody tr td {
-    text-align: center;
-    border: 1px solid black;
-  }
-   thead th {
-    border: 1px solid black;
-  }
+  border-collapse: collapse;
+  width: 100%;
+}
 
-  thead th {
-    align-items: center;
-  }
-  
-  
+tbody tr td {
+  text-align: center;
+  border: 1px solid black;
+}
+thead th {
+  border: 1px solid black;
+}
+
+thead th {
+  align-items: center;
+}

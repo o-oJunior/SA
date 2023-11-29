@@ -5,12 +5,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/home';
 import Ensalamento from './pages/ensalamento/listagem/ensalamento';
 import Professores from './pages/professores/listagem/professores';
-import Turmas from './pages/turmas';
+import Turmas from './pages/turma/turmas';
 import CadastrarProfessores from './pages/professores/cadastro/cadastroProfessores';
-import CadastrarTurmas from './pages/cadastroTurmas';
+import CadastrarTurmas from './pages/turma/cadastroTurmas';
 import Layout from './components/layout/layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 const router = createBrowserRouter([
   {
