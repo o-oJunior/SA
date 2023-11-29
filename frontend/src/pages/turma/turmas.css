@@ -97,3 +97,13 @@
 .btnLimpar {
   background-color: #ce2b37;
 }
+
+.btnBack {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+}
+
+.btnDelete:hover {
+  cursor: pointer;
+}

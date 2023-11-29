@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './turmas.css';
+import { Link } from 'react-router-dom';
 
 const initialValue = {
   codigo: '',
@@ -19,19 +20,17 @@ export default function CadastrarTurmas() {
   const save = async (e) => {
     e.preventDefault();
     try {
-      const teste = await fetch('https://api-ensalamento-senai.onrender.com/api/turmas/adicionar', {
+      await fetch('https://api-ensalamento-senai.onrender.com/api/turmas/adicionar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(turma),
       });
-
-      console.log('Aqui chegou');
-      console.log(teste);
-      console.log(turma);
+      alert('Turma adicionada com sucesso!');
+      setTurma(initialValue);
     } catch (error) {
-      console.log(error);
+      alert('Erro ao adicionar a turma!');
     }
   };
 
@@ -43,6 +42,11 @@ export default function CadastrarTurmas() {
     <div className="containerTurma">
       <span className="title">Cadastrar Turma</span>
       <form className="containerForm">
+        <div>
+          <Link to="/turmas" className="btnBack">
+            Voltar
+          </Link>
+        </div>
         <div className="formContent">
           <div className="groupInput">
             <label>Código</label>

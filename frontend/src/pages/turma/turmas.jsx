@@ -19,6 +19,17 @@ export default function Turmas() {
     }
   };
 
+  const deleted = async (idTurma) => {
+    try {
+      await fetch(`https://api-ensalamento-senai.onrender.com/api/turmas/deletar/turma?id=${idTurma}`, {
+        method: 'DELETE',
+      });
+      getTurmas();
+    } catch (error) {
+      console.log('Erro ao excluir a turma');
+    }
+  };
+
   return (
     <div className="containerTurma">
       <div className="groupSearch">
@@ -43,6 +54,9 @@ export default function Turmas() {
                     <td>{turma.codigo}</td>
                     <td>{turma.numeroAlunos}</td>
                     <td>{turma.turno}</td>
+                    <td>
+                      <i onClick={() => deleted(turma.id)} className="fa-solid fa-trash-can btnDelete"></i>
+                    </td>
                   </tr>
                 );
               })}
